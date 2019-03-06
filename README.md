@@ -17,3 +17,5 @@ For other vendors (Microsoft SQL, MySQL, PostgreSQL, IBM DB2, Oracle) only selec
 
 Please check openMpp package `man` documentation and `inst` examples.
 Also visit our [wiki](http://www.openmpp.org/wiki/) for more information.
+
+License: MIT.

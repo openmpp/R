@@ -16,6 +16,6 @@ As it is today only SQLite databases supported.
 For other vendors (Microsoft SQL, MySQL, PostgreSQL, IBM DB2, Oracle) only select from databse tested, update not implemented.
 
 Please check openMpp package `man` documentation and `inst` examples.
-Also visit our [wiki](http://www.openmpp.org/wiki/) for more information.
+Also visit our [wiki](https://ompp.sourceforge.io/wiki/) for more information.
 
 License: MIT.

@@ -19,3 +19,5 @@ Please check openMpp package `man` documentation and `inst` examples.
 Also visit our [wiki](https://ompp.sourceforge.io/wiki/) for more information.
 
 License: MIT.
+
+E-mail: openmpp dot org at gmail dot com

@@ -20,4 +20,4 @@ Also visit our [wiki](https://ompp.sourceforge.io/wiki/) for more information.
 
 License: MIT.
 
-E-mail: openmpp dot org at gmail dot com
+E-mail: _openmpp dot org at gmail dot com_

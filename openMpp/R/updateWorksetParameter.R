@@ -13,7 +13,7 @@
 # ...       - list of parameters value and (optional) value notes
 #   each element is also a list of $name, $subId, $value, $txt
 #   $name  - parameter name (character)
-#   $subId - sub-value index, default: 0
+#   $subId - sub-value id, default: 0
 #   $value - parameter value
 #     it can be scalar value, vector or data frame
 #     size of $value must be equal to production of dimension sizes
@@ -84,11 +84,11 @@ updateWorksetParameter <- function(dbCon, defRs, worksetId, ...)
       # get parameter row
       paramRow <- defRs$paramDic[which(defRs$paramDic$parameter_name == wsParam$name), ]
 
-      # get sub-value index, it must be less than workset_parameter.sub_count
+      # get sub-value id
       wsRow <- setParamRs[which(setParamRs$parameter_hid == paramRow$parameter_hid), ]
 
       nSubId <- ifelse(!is.null(wsParam$subId) && !is.na(wsParam$subId), as.integer(wsParam$subId), 0L)
-      if (nSubId < 0 || nSubId >= wsRow$sub_count) stop("invalid sub-value index for parameter ", wsParam$name)
+      # if (nSubId < 0 || nSubId >= wsRow$sub_count) stop("invalid sub-value id for parameter ", wsParam$name)
       
       # get name and size for each dimension if any dimensions exists for that parameter
       dimNames <- c("")

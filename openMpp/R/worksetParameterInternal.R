@@ -57,7 +57,7 @@ updateWorksetParameterTxt <- function(dbCon, i_paramDef, i_wsParamTxt = NULL)
 # dbCon - database connection
 # i_paramDef - list with:
 #   $setId       - workset id
-#   $subId       - sub-value index
+#   $subId       - sub-value id
 #   $dbTableName - workset parameter table name
 #   $dims        - data frame for each dimension
 #     $name - dimension name
@@ -181,10 +181,11 @@ updateWorksetParameterValue <- function(dbCon, i_paramDef, i_value = NULL)
 # i_isCreate   - if true then parameters must have $value
 # i_wsParamLst - list of parameters value and (optional) value notes
 #   each element is also a list of $name, $value and $txt
-#   $name     - parameter name (character)
-#   $subCount - (optional) sub-value count, default: 1
-#   $subId    - (optional) sub-value index, default: 0
-#   $value    - parameter value
+#   $name         - parameter name (character)
+#   $subCount     - (optional) sub-value count, default: 1
+#   $defaultSubId - (optional) default sub-value id, default: 0
+#   $subId        - (optional) sub-value id, default: 0
+#   $value        - parameter value
 #     it can be scalar value, vector or data frame
 #   $txt - (optional) workset parameter text:
 #     data frame with $lang = language code and $note = value notes
@@ -229,13 +230,22 @@ validateParameterValueLst <- function(i_langRs, i_isCreate, i_wsParamLst)
       if (nCount < 1) stop("invalid number sub-values for parameter ", wsPar$name)
     }
 
-    # validate sub-value index
+    # validate default sub-value id
+    nDefaultId <- 0L
+    if (!is.null(wsPar$defaultSubId) && !is.na(wsPar$defaultSubId)) {
+      if (!is.numeric(wsPar$defaultSubId)) stop("workset parameter $subCount must be numeric, parameter: ", wsPar$name)
+
+      nDefaultId <- as.integer(wsPar$defaultSubId)
+      # if (nDefaultId < 0) stop("invalid number sub-values for parameter ", wsPar$name)
+    }
+
+    # validate sub-value id
     nSubId <- 0L
     if (!is.null(wsPar$subId) && !is.na(wsPar$subId)) {
       if (!is.numeric(wsPar$subId)) stop("workset parameter $subId must be numeric, parameter: ", wsPar$name)
 
       nSubId <- as.integer(wsPar$subId)
-      if (nSubId < 0) stop("invalid sub-value index for parameter ", wsPar$name)
+      # if (nSubId < 0) stop("invalid sub-value id for parameter ", wsPar$name)
     }
     
     if (is.null(wsPar$"txt")) next  # parameter value notes is optional

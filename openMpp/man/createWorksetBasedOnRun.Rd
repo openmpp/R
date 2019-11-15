@@ -32,11 +32,12 @@ createWorksetBasedOnRun(dbCon, defRs, baseRunId, setDef, ...)
   \item{\dots}{
     list of parameters value and (optional) value notes.
     
-    Each element is also a list of $name, $subCount, $subId, $value, $txt:
+    Each element is also a list of $name, $subCount, $defaultSubId, $subId, $value, $txt:
     \itemize{
       \item \code{$name} parameter name (character) 
       \item \code{$subCount} (optional) number of parameter sub-values, default: 1
-      \item{subId} (optional) parameter sub-value index, default: 0
+      \item \code{$defaultSubId} (optional) default sub-value id, default: 0
+      \item \code{subId} (optional) parameter sub-value id, default: 0
       \item \code{$value} parameter value
         it can be scalar value, vector or data frame
         size of $value must be equal to production of dimension sizes
@@ -78,7 +79,8 @@ after \code{createWorksetBasedOnRun}.
 
 Parameter(s) can have can have multiple sub-values (by default only one value, no sub-values).
 If you want to have multiple sub-values then $subCount must be >1 (default =1).
-If parameter have multiple sub-values then you can specify sub-value index as $subId (default =0).
+If parameter has multiple sub-values then you can specify sub-value id as $subId (default =0).
+Also you can specify default sub-value id for that workset parameter as $defaultSubId (default =0).
 
 You must use \code{getModel} function in order to find model definition \code{defRs}.
 }
@@ -113,7 +115,8 @@ To run examples you must have modelOne database modelOne.sqlite in current direc
   seedSubVal <- list(
     name = "StartingSeed", 
     subCount = 2L,        # two sub-values for that parameter
-    subId = 0L,           # sub-value index =0 
+    defaultSubId = 1L,    # default sub-value id for that parameter
+    subId = 0L,           # sub-value id =0 
     value = 100L          # sub-value[0] = 100
   )
   

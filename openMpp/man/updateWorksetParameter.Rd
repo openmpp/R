@@ -26,7 +26,7 @@ updateWorksetParameter(dbCon, defRs, worksetId, ...)
     \itemize{
       \item \code{$name} parameter name (character) 
       \item \code{$subCount} (optional) number of parameter sub-values, default: 1
-      \item{subId} (optional) parameter sub-value index, default: 0
+      \item \code{subId} (optional) parameter sub-value id, default: 0
       \item \code{$value} (optional) parameter value
         it can be scalar value. vector or data frame
         size of $value must be equal to production of dimension sizes
@@ -42,7 +42,7 @@ updateWorksetParameter(dbCon, defRs, worksetId, ...)
 That call allow you to update input parameter value and value notes in specific workset.
 
 Parameter(s) can have can have multiple sub-values (by default only one value, no sub-values).
-If parameter have multiple sub-values then you can specify sub-value index as $subId (default =0).
+If parameter have multiple sub-values then you can specify sub-value id as $subId (default =0).
 
 Workset is a working set of model parameters and can be a full set, 
 which include values of all model parameters or subset and include only some parameters.

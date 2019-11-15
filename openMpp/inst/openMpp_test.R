@@ -263,7 +263,7 @@ setDef$descr <- c("set with 4 sub-values")
 seedSubVal <- list(
   name = "StartingSeed", 
   subCount = 2L,        # two sub-values for that parameter
-  subId = 0L,           # sub-value index =0 
+  subId = 0L,           # sub-value id =0 
   value = 100L          # sub-value[0] = 100
 )
 

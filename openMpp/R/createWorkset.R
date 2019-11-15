@@ -18,10 +18,11 @@
 #   $note  - (optional) working set notes
 # ... - list of parameters value and (optional) value notes
 #   each element is also a list of $name, $subCount, $subId, $value, $txt
-#   $name     - parameter name (character)
-#   $subCount - (optional) number of parameter sub-values, default: 1
-#   $subId    - (optional) sub-value index, default: 0
-#   $value    - parameter value
+#   $name         - parameter name (character)
+#   $subCount     - (optional) number of parameter sub-values, default: 1
+#   $defaultSubId - (optional) default sub-value id, default: 0
+#   $subId        - (optional) sub-value id, default: 0
+#   $value        - parameter value
 #     it can be scalar value, vector or data frame
 #     size of $value must be equal to production of dimension sizes
 #     if data frame then 
@@ -63,10 +64,11 @@ createWorkset <- function(dbCon, defRs, setDef, ...)
 #   $note  - (optional) working set notes
 # ... - list of parameters value and (optional) value notes
 #   each element is also a list of $name, $subCount, $subId, $value, $txt
-#   $name     - parameter name (character)
-#   $subCount - (optional) number of parameter sub-values, default: 1
-#   $subId    - (optional) sub-value index, default: 0
-#   $value    - parameter value
+#   $name         - parameter name (character)
+#   $subCount     - (optional) number of parameter sub-values, default: 1
+#   $defaultSubId - (optional) default sub-value id, default: 0
+#   $subId        - (optional) sub-value id, default: 0
+#   $value        - parameter value
 #     it can be scalar value, vector or data frame
 #     size of $value must be equal to production of dimension sizes
 #     if data frame then 
@@ -125,10 +127,11 @@ createWorksetBasedOnRun <- function(dbCon, defRs, baseRunId, setDef, ...)
 #   $note  - (optional) working set notes
 # ... - list of parameters value and (optional) value notes
 #   each element is also a list of $name, $subCount, $subId, $value, $txt
-#   $name     - parameter name (character)
-#   $subCount - (optional) number of parameter sub-values, default: 1
-#   $subId    - (optional) sub-value index, default: 0
-#   $value    - parameter value
+#   $name         - parameter name (character)
+#   $subCount     - (optional) number of parameter sub-values, default: 1
+#   $defaultSubId - (optional) default sub-value id, default: 0
+#   $subId        - (optional) sub-value id, default: 0
+#   $value        - parameter value
 #     it can be scalar value, vector or data frame
 #     size of $value must be equal to production of dimension sizes
 #     if data frame then 
@@ -232,7 +235,7 @@ createNewWorkset <- function(dbCon, defRs, i_isRunBased, i_baseRunId, i_setDef, 
       # get parameter row
       paramRow <- defRs$paramDic[which(defRs$paramDic$parameter_name == wsParam$name), ]
       
-      # validate sub-value count and index
+      # validate sub-value count
       isCount <- !is.null(wsParam$subCount) && !is.na(wsParam$subCount)
       nCount <- ifelse(isCount, as.integer(wsParam$subCount), 1L)
       if (nCount < 1) stop("invalid (less than 1) sub-value count for parameter ", wsParam$name)
@@ -259,14 +262,20 @@ createNewWorkset <- function(dbCon, defRs, i_isRunBased, i_baseRunId, i_setDef, 
         }
       }
 
+      # default sub-value id for that parameter and sub-value id for values
+      nDefaultId <- ifelse(!is.null(wsParam$defaultSubId) && !is.na(wsParam$defaultSubId), as.integer(wsParam$defaultSubId), 0L)
       nSubId <- ifelse(!is.null(wsParam$subId) && !is.na(wsParam$subId), as.integer(wsParam$subId), 0L)
-      if (nSubId < 0 || nSubId >= nCount) stop("invalid sub-value index for parameter ", wsParam$name)
+      # if (nSubId < 0 || nSubId >= nCount) stop("invalid sub-value id for parameter ", wsParam$name)
       
       # add parameter into workset
       dbExecute(
         dbCon, 
         paste(
-          "INSERT INTO workset_parameter (set_id, parameter_hid, sub_count) VALUES (", setId, ", ", paramRow$parameter_hid, ", ", nCount, " )",
+          "INSERT INTO workset_parameter (set_id, parameter_hid, sub_count, default_sub_id) VALUES (",
+          setId, ", ",
+          paramRow$parameter_hid, ", ",
+          nCount, ", ",
+          nDefaultId, " )",
           sep = ""
         )
       )

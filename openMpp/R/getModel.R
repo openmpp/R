@@ -22,7 +22,7 @@
 #
 # dbCon       - database connection
 # modelName   - model name, ie: "modelOne"
-# modelDigest - model digest, ie: "20120817_1604590148"
+# modelDigest - model digest, ie: "_201208171604590148_"
 #
 getModel <- function(dbCon, modelName, modelDigest = NA) 
 {

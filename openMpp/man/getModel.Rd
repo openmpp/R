@@ -17,7 +17,7 @@ getModel(dbCon, modelName, modelDigest = NA)
     model name, ie: "modelOne"
   }
   \item{modelDigest}{
-    (optional) model digest, ie: "20120817_1604590148"
+    (optional) model digest, ie: "_201208171604590148_"
     if digest is NA or NULL then first model with min(model_id) is used
   }
 }
@@ -71,7 +71,7 @@ To run examples you must have modelOne database modelOne.sqlite in current direc
   defRs <- getModel(theDb, "modelOne")
   
   # use model digest to identify exact version of the model
-  def2012August17 <- getModel(theDb, "modelOne", "20120817_1604590148")
+  def2012August17 <- getModel(theDb, "modelOne", "_201208171604590148_")
   
   dbDisconnect(theDb)
 }

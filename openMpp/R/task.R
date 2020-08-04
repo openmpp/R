@@ -39,8 +39,8 @@ createTask <- function(dbCon, defRs, taskTxt = NA, setIds = NA)
     dbBegin(dbCon)
 
     # get next task id
-    dbExecute(dbCon, "UPDATE id_lst SET id_value = id_value + 1 WHERE id_key = 'task_id'")
-    idRs <- dbGetQuery(dbCon, "SELECT id_value FROM id_lst WHERE id_key = 'task_id'")
+    dbExecute(dbCon, "UPDATE id_lst SET id_value = id_value + 1 WHERE id_key = 'run_id_set_id'")
+    idRs <- dbGetQuery(dbCon, "SELECT id_value FROM id_lst WHERE id_key = 'run_id_set_id'")
     if (nrow(idRs) <= 0L || idRs$id_value <= 0L) stop("can not get new task id from id_lst table")
     
     taskId <- idRs$id_value

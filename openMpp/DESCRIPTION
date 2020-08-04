@@ -1,8 +1,8 @@
 Package: openMpp
 Type: Package
 Title: Read and write OpenM++ database from R
-Version: 0.8.3
-Date: 2019-11-15
+Version: 0.8.4
+Date: 2020-08-04
 Author: amc1999
 Maintainer: amc1999 <openmpp99@gmail.com>
 Description: Set input parameters and get output results of openM++ models using R.

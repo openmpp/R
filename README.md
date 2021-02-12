@@ -3,6 +3,8 @@
 This repository is a part of [OpenM++](http://www.openmpp.org/) open source microsimulation platform.
 It contains openMpp R package which allow read and update openM++ model database.
 
+As it is today openMpp package tested only with R up to version 3.6.3 and R version 4 has not been tested yet.
+
 ## Install and use latest release
 
 Download [latest openMpp R package release](https://github.com/openmpp/r/releases/latest) and install:

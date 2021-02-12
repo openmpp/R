@@ -13,4 +13,6 @@ Following operations supported:
 Examples can be found in R/openMpp/inst subdirectory 
 and you can use models/bin/*.sqlite database files to run it.
 
+As it is today this package tested only with R up to version 3.6.3 and R version 4 has not been tested yet.
+
 More information about OpenM++ at http://ompp.sourceforge.net/wiki/

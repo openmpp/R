@@ -3,7 +3,27 @@
 This repository is a part of [OpenM++](http://www.openmpp.org/) open source microsimulation platform.
 It contains openMpp R package which allow read and update openM++ model database.
 
-## Build and install
+## Install and use latest release
+
+Download [latest openMpp R package release](https://github.com/openmpp/r/releases/latest) and install:
+```
+install.packages("~/openMpp_N.N.N.tar.gz", repos = NULL, type = "source")
+library(DBI)
+library("openMpp")
+library("RSQLite")
+```
+
+Download [latest openM++ release](https://github.com/openmpp/main/releases/latest), unpack it and `setwd()` to models directory:
+```
+setwd("~/openmpp_win_20210209/models/bin")
+```
+
+Try our examples:
+
+- life_vs_mortality_test.R: [analyze DurationOfLife using MortalityHazard parameter](https://ompp.sourceforge.io/wiki/index.php/Run_Model_from_R)
+- riskpaths_childlessness.R: [aanalyze contribution of delayed union formations versus decreased fertility on childlessness](https://ompp.sourceforge.io/wiki/index.php/Run_RiskPaths_Model_from_R)
+
+## Build from sources and install
 
 ```
 R CMD build openMpp

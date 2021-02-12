@@ -21,7 +21,7 @@ setwd("~/openmpp_win_20210209/models/bin")
 Try our examples:
 
 - life_vs_mortality_test.R: [analyze DurationOfLife using MortalityHazard parameter](https://ompp.sourceforge.io/wiki/index.php/Run_Model_from_R)
-- riskpaths_childlessness.R: [aanalyze contribution of delayed union formations versus decreased fertility on childlessness](https://ompp.sourceforge.io/wiki/index.php/Run_RiskPaths_Model_from_R)
+- riskpaths_childlessness.R: [analyze contribution of delayed union formations versus decreased fertility on childlessness](https://ompp.sourceforge.io/wiki/index.php/Run_RiskPaths_Model_from_R)
 
 ## Build from sources and install
 

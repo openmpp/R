@@ -193,7 +193,7 @@ createNewWorkset <- function(dbCon, defRs, i_isRunBased, i_baseRunId, i_setDef, 
     
     # workset name, make auto-name if empty
     setName <- ifelse(isAnyWsTxt, i_setDef$name, NA)
-    if (is.na(setName)) setName <- toQuoted(paste("set_", setId, sep = ""))
+    if (is.na(setName)) setName <- paste("set_", setId, sep = "")
     
     # create workset
     dbExecute(
@@ -216,8 +216,13 @@ createNewWorkset <- function(dbCon, defRs, i_isRunBased, i_baseRunId, i_setDef, 
     if (isAnyWsTxt) {
       sqlInsTxt <-
         paste(
-          "INSERT INTO workset_txt (set_id, lang_id, descr, note)",
-          " VALUES (", setId, ", ", " :lang, :descr, :note", " )",
+	  "INSERT INTO workset_txt (set_id, lang_id, descr, note)",
+          " SELECT",
+	  " W.set_id,",
+          " (SELECT L.lang_id FROM lang_lst L WHERE L.lang_code = :lang),",
+          " :descr,",
+          " :note",
+          " FROM workset_lst W WHERE W.set_id = ", setId,
           sep = ""
         )
       dbExecute(
@@ -226,7 +231,7 @@ createNewWorkset <- function(dbCon, defRs, i_isRunBased, i_baseRunId, i_setDef, 
         params = subset(i_setDef, !is.na(lang) & !is.na(descr), select = c(lang, descr, note))
       )
     }
-    
+
     #
     # update parameters value and value notes
     #

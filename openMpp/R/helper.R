@@ -32,7 +32,8 @@ validateTxtFrame <- function(i_msgPart, i_langRs, i_txt)
 {
   # validate data frame itself, exit if empty
   if (missing(i_txt)) return(FALSE)
-  if (is.null(i_txt) || is.na(i_txt)) return(FALSE)
+  if (is.null(i_txt)) return(FALSE)
+  if (!is.data.frame(i_txt) && is.na(i_txt)) return(FALSE)
   if (!is.data.frame(i_txt)) stop(i_msgPart, " must be a data frame")
   if (nrow(i_txt) <= 0L) return(FALSE)
   

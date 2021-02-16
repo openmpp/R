@@ -28,7 +28,8 @@ updateWorksetParameterTxt <- function(dbCon, i_paramDef, i_wsParamTxt = NULL)
       " SELECT", 
       " set_id, ", 
       i_paramDef$paramHid, ", ",
-      " :lang, :note",
+      " (SELECT L.lang_id FROM lang_lst L WHERE L.lang_code = :lang),",
+      " :note",
       " FROM workset_lst",
       " WHERE set_id = ", i_paramDef$setId,
       sep = ""

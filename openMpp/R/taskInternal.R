@@ -55,9 +55,12 @@ updateTaskTxt <- function(dbCon, defRs, i_taskId, i_taskTxt = NA)
   sqlInsTxt <-
     paste(
       "INSERT INTO task_txt (task_id, lang_id, descr, note)",
-      " VALUES (", 
-      i_taskId, ", :lang, :descr, :note",
-      " )",
+      " SELECT",
+      " T.task_id,",
+      " (SELECT L.lang_id FROM lang_lst L WHERE L.lang_code = :lang),",
+      " :descr,",
+      " :note",
+      " FROM task_lst T WHERE T.task_id = ", i_taskId,
       sep = ""
     )
   dbExecute(

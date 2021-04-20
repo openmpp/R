@@ -29,7 +29,7 @@ Default workset is a first workset of the model with set_id = min(set_id) for th
   Working set id: positive integer on success or negative on error. Stop if not found.
 }
 \references{
-OpenM++ documentation: http://ompp.sourceforge.net/wiki/
+OpenM++ documentation: https://github.com/openmpp/openmpp.github.io/wiki
 }
 \author{
 amc1999

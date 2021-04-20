@@ -21,7 +21,7 @@
   Return SQL-quoted string: O'Connor -> 'O''Connor'
 }
 \references{
-OpenM++ documentation: http://ompp.sourceforge.net/wiki/
+OpenM++ documentation: https://github.com/openmpp/openmpp.github.io/wiki
 }
 \author{
 amc1999
@@ -29,7 +29,7 @@ amc1999
 \note{
 }
 \seealso{
-http://ompp.sourceforge.net/wiki/
+https://github.com/openmpp/openmpp.github.io/wiki
 }
 \examples{
 someName <- toQuoted("O'Connor")

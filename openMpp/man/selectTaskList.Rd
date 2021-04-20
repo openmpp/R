@@ -26,7 +26,7 @@ This call return list of tasks for specified model.
   \item{taskTxt}{ task_txt rows: language, description, notes }
 }
 \references{
-OpenM++ documentation: http://ompp.sourceforge.net/wiki/
+OpenM++ documentation: https://github.com/openmpp/openmpp.github.io/wiki
 }
 \author{
 amc1999

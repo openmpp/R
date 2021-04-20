@@ -27,7 +27,7 @@ This call return task text (name, description, notes) and input workset id's.
   \item{taskSet}{ task_set rows: task input workset id's }
 }
 \references{
-OpenM++ documentation: http://ompp.sourceforge.net/wiki/
+OpenM++ documentation: https://github.com/openmpp/openmpp.github.io/wiki
 }
 \author{
 amc1999

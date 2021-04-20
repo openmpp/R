@@ -41,7 +41,7 @@ Use \code{updateTask} function to insert additional task input.
   \item{taskRunLst}{ task_run_lst rows: task run id, status and time }
 }
 \references{
-OpenM++ documentation: http://ompp.sourceforge.net/wiki/
+OpenM++ documentation: https://github.com/openmpp/openmpp.github.io/wiki
 }
 \author{
 amc1999

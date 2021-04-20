@@ -25,7 +25,7 @@ If there is no run(s) for that modeling task then return negative value.
   Task run id: positive integer on success or negative on if not found.
 }
 \references{
-OpenM++ documentation: http://ompp.sourceforge.net/wiki/
+OpenM++ documentation: https://github.com/openmpp/openmpp.github.io/wiki
 }
 \author{
 amc1999

@@ -41,7 +41,7 @@ Use \code{updateTask} function to insert additional task input.
   \item{taskRunSet}{ task_run_set rows: input workset id's and result run id's }
 }
 \references{
-OpenM++ documentation: http://ompp.sourceforge.net/wiki/
+OpenM++ documentation: https://github.com/openmpp/openmpp.github.io/wiki
 }
 \author{
 amc1999

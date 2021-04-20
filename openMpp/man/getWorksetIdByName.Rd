@@ -29,7 +29,7 @@ If model has multiple working sets with that name then return min(set id) with s
   Working set id: positive integer on success or negative if not found.
 }
 \references{
-OpenM++ documentation: http://ompp.sourceforge.net/wiki/
+OpenM++ documentation: https://github.com/openmpp/openmpp.github.io/wiki
 }
 \author{
 amc1999

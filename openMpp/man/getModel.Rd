@@ -42,7 +42,7 @@ If there are multiple models with same name in database and digest is NA or NULL
   \item{tableExpr}{ table_expr rows of the model }
 }
 \references{
-OpenM++ documentation: http://ompp.sourceforge.net/wiki/
+OpenM++ documentation: https://github.com/openmpp/openmpp.github.io/wiki
 }
 \author{
 amc1999

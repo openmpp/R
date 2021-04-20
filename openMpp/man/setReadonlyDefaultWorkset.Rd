@@ -38,7 +38,7 @@ You must use \code{getModel} function in order to find model definition \code{de
   Return working set id of default workset or 0L if not found
 }
 \references{
-OpenM++ documentation: http://ompp.sourceforge.net/wiki/
+OpenM++ documentation: https://github.com/openmpp/openmpp.github.io/wiki
 }
 \author{
 amc1999

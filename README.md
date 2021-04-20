@@ -22,8 +22,8 @@ setwd("~/openmpp_win_20210209/models/bin")
 
 Try our examples:
 
-- life_vs_mortality_test.R: [analyze DurationOfLife using MortalityHazard parameter](https://ompp.sourceforge.io/wiki/index.php/Run_Model_from_R)
-- riskpaths_childlessness.R: [analyze contribution of delayed union formations versus decreased fertility on childlessness](https://ompp.sourceforge.io/wiki/index.php/Run_RiskPaths_Model_from_R)
+- life_vs_mortality_test.R: [analyze DurationOfLife using MortalityHazard parameter](https://github.com/openmpp/openmpp.github.io/wiki/Run-Model-from-R)
+- riskpaths_childlessness.R: [analyze contribution of delayed union formations versus decreased fertility on childlessness](https://github.com/openmpp/openmpp.github.io/wiki/Run-RiskPaths-Model-from-R)
 
 ## Build from sources and install
 
@@ -38,7 +38,7 @@ As it is today only SQLite databases supported.
 For other vendors (Microsoft SQL, MySQL, PostgreSQL, IBM DB2, Oracle) only select from databse tested, update not implemented.
 
 Please check openMpp package `man` documentation and `inst` examples.
-Also visit our [wiki](https://ompp.sourceforge.io/wiki/) for more information.
+Also visit our [wiki](https://github.com/openmpp/openmpp.github.io/wiki) for more information.
 
 License: MIT.
 

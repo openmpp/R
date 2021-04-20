@@ -31,7 +31,7 @@ to include multiple working sets of input parameters and run the model using suc
   Data frame with integer $run_id column
 }
 \references{
-OpenM++ documentation: http://ompp.sourceforge.net/wiki/
+OpenM++ documentation: https://github.com/openmpp/openmpp.github.io/wiki
 }
 \author{
 amc1999

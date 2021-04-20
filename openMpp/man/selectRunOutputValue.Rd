@@ -42,7 +42,7 @@ You must use \code{getModel} function in order to find model definition \code{de
   \item{value}{ output table expression(s) value }
 }
 \references{
-OpenM++ documentation: http://ompp.sourceforge.net/wiki/
+OpenM++ documentation: https://github.com/openmpp/openmpp.github.io/wiki
 }
 \author{
 amc1999

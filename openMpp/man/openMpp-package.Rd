@@ -106,7 +106,7 @@ amc1999
 Maintainer: amc1999 <openmpp99@gmail.com>
 }
 \references{
-OpenM++ documentation: http://ompp.sourceforge.net/wiki/
+OpenM++ documentation: https://github.com/openmpp/openmpp.github.io/wiki
 }
 \keyword{ OpenM++ }
 \keyword{ database }

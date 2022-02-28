@@ -6,9 +6,13 @@
 #   "taskOne" modeling taskOne, usually task_id = 1
 #   results of "taskOne" run
 #
-library(DBI)
-library("openMpp")
+# install.packages("DBI")
+# install.packages("RSQLite")
+# install.packages("./openMpp_0.8.6.tar.gz", repos = NULL, type = "source")
+#
+library("DBI")
 library("RSQLite")
+library("openMpp")
 
 #
 # open db connection: SQLite model database
@@ -235,10 +239,10 @@ setId <- createWorksetBasedOnRun(theDb, defRs, firstRunId, setDef)
 if (setId <= 0L) stop("workset creation failed: ", defRs$modelDic$model_name, " ", defRs$modelDic$model_digest)
 
 #
-# copy ageSex parameter values from other model run (second model run)
+# copy ageSex parameter values from other model run
 # all sub-values of ageSex parameter will be copied
 #
-secondRunId <- 1L + getFirstRunId(theDb, defRs)
+secondRunId <- 1L + getFirstRunId(theDb, defRs) # for modelOne openM++ release.zip: second model run id = first + 1
 
 ageSexCopy <- list(
   name = "ageSex",  # parameter name to copy

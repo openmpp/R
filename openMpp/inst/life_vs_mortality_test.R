@@ -24,7 +24,8 @@ library("RSQLite")
 # For the following values to work, you must first set the R Working directory
 # to the directory containing the NewCaseBased executable and the SQLite database.
 # In RStudio Session > Set Working Directory > Choose Directory, 
-# then navigate to location, e.g.: /ompp_root/models/NewCaseBased/ompp/bin
+# then navigate to location, e.g.: /OM_ROOT/models/NewCaseBased/ompp/bin
+# Alternatively, one may use setwd(), e.g.: setwd("/OM_ROOT/models/NewCaseBased/ompp/bin")
 #
 model_exe = "./NewCaseBased"
 model_sqlite = "NewCaseBased.sqlite"

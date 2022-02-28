@@ -30,7 +30,8 @@ library("RSQLite")
 # For the following values to work, you must first set the R Working directory
 # to the directory containing the RiskPaths executable and the SQLite database.
 # In RStudio Session > Set Working Directory > Choose Directory, 
-# then navigate to location, e.g.: /ompp_root/models/RiskPaths/ompp/bin
+# then navigate to location, e.g.: /OM_ROOT/models/RiskPaths/ompp/bin
+# Alternatively, one may use setwd(), e.g.: setwd("/OM_ROOT/models/RiskPaths/ompp/bin")
 #
 model_exe = "./RiskPaths"
 model_sqlite = "RiskPaths.sqlite"
@@ -55,21 +56,22 @@ model_args = " "  # default: 1 simulation member and 1 thread
 theDb <- dbConnect(RSQLite::SQLite(), model_sqlite, synchronous = "full")
 invisible(dbGetQuery(theDb, "PRAGMA busy_timeout = 86400"))   # recommended
 
-defRs <- getModel(theDb, "RiskPaths")       # find RiskPaths model in database
+# find RiskPaths model in database and get model dictionaries ("modelDic", "typeDic", etc...)
+defRs <- getModel(theDb, "RiskPaths")
 
 #
 # create a copy of default model parameters
 #
 baseRunId <- getFirstRunId(theDb, defRs)
 if (baseRunId <= 0) 
-  stop("no run results found for the model ", i_defRs$modelDic$model_name, " ", defRs$modelDic$model_digest)
+  stop("no run results found for the model ", defRs$modelDic$model_name, " ", defRs$modelDic$model_digest)
 
 #
 # get default values for AgeBaselineForm1 and UnionStatusPreg1 parameters 
 # by reading it from first model run results
 # assuming first run of the model done with default set of parameters
 #
-ageFirstUnionRs <- selectRunParameter(theDb, defRs, baseRunId, "AgeBaselineForm1")
+ageFirstUnionRs   <- selectRunParameter(theDb, defRs, baseRunId, "AgeBaselineForm1")
 unionStatusPregRs <- selectRunParameter(theDb, defRs, baseRunId, "UnionStatusPreg1")
 
 #
@@ -91,7 +93,12 @@ taskId <- createTask(theDb, defRs, taskTxt)
 if (taskId <= 0L) stop("task creation failed: ", defRs$modelDic$model_name, " ", defRs$modelDic$model_digest)
 
 # parameters scale
+#
+# scaleValues <- seq(from = 0.50, to = 1.00, by = 0.50) # tiny set of runs for quick test
+#
 scaleValues <- seq(from = 0.44, to = 1.00, by = 0.02)
+
+UnionStatusMultipler = rep(1, length(unionStatusPregRs$param_value)) # vector of 1's
 
 for (scAgeBy in scaleValues)
 {
@@ -101,18 +108,10 @@ for (scAgeBy in scaleValues)
   {
     ageParam <- list(name = "AgeBaselineForm1", value = ageFirstUnionRs$param_value * scAgeBy)
     
-    unionParam <- list(         # scale first two values of parameter vector
-      name = "UnionStatusPreg1", 
-      value = 
-        sapply(
-          1:length(unionStatusPregRs$param_value), 
-          function(k, sc, vec) ifelse(k <= 2, vec[k] * sc, vec[k]), 
-          sc = scUnionBy, 
-          vec = unionStatusPregRs$param_value
-        )
-    )
-    
-    # append new working set of parameters into the task
+    UnionStatusMultipler[1:2] = scUnionBy  # scale first two values of parameter vector
+    unionParam <- list(name = "UnionStatusPreg1", value = unionStatusPregRs$param_value *  UnionStatusMultipler )
+
+    # Append new working set of parameters into the task. A corresponding setId is generated.
     setId <- createWorksetBasedOnRun(theDb, defRs, baseRunId, NA, ageParam, unionParam, casesParam)
     setReadonlyWorkset(theDb, defRs, TRUE, setId)
     
@@ -143,6 +142,17 @@ system2(
 #
 taskRunId <- getTaskLastRunId(theDb, taskId)  # most recent task run id
 taskRunRs <- selectTaskRun(theDb, taskRunId)  # get result id's
+#
+# taskRunId
+# [1] 111
+# taskRunRs$taskRunSet  # Content for "tiny set of runs"
+#   task_run_id run_id set_id task_id
+# 1         108    109    104     103
+# 2         108    110    105     103
+# 3         108    111    106     103
+# 4         108    112    107     103
+# Main scenario task_id 103 comes with 4 sets of parameters  set_id 104, 105, 106, 107  (e.g. PSA)
+# The main scenario/task was run (task_run_id 108) which spins out 4 runs run_id 109, 110, 111, 112
 
 scaleLen <- length(scaleValues)
 childlessnessMat <- matrix(data = NA, nrow = scaleLen, ncol = scaleLen, byrow = TRUE)

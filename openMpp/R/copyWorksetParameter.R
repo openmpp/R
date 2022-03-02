@@ -99,10 +99,12 @@ copyWorksetParameterFromRun <- function(dbCon, defRs, worksetId, baseRunId, ...)
       
       # get name and size for each dimension if any dimensions exists for that parameter
       dimNames <- c("")
+      colNames <- c("")
       dimLen <- c(0L)
       if (paramRow$parameter_rank > 0) {
      
         dimNames <- defRs$paramDims[which(defRs$paramDims$parameter_hid == paramRow$parameter_hid), "dim_name"]
+        colNames <- defRs$paramDims[which(defRs$paramDims$parameter_hid == paramRow$parameter_hid), "col_name"]
         
         if (length(dimNames) != paramRow$parameter_rank) {
           stop("invalid length of dimension names vector for parameter: ", paramRow$parameter_name)
@@ -124,7 +126,7 @@ copyWorksetParameterFromRun <- function(dbCon, defRs, worksetId, baseRunId, ...)
         setId = worksetId, 
         paramHid = paramRow$parameter_hid, 
         dbTableName = paramRow$db_set_table,
-        dims = data.frame(name = dimNames, size = dimLen, stringsAsFactors = FALSE)
+        dims = data.frame(name = dimNames, dbName = colNames, size = dimLen, stringsAsFactors = FALSE)
       )
       
       # add parameter into workset
@@ -147,7 +149,7 @@ copyWorksetParameterFromRun <- function(dbCon, defRs, worksetId, baseRunId, ...)
       # use base run id if run is not a full run and parameter value(s) stored under base run id
       nameCs <- ifelse(
         paramRow$parameter_rank > 0, 
-        paste(paste(paramDef$dims$name, sep = "", collapse = ", "), ", ", sep = ""),
+        paste(paste(paramDef$dims$dbName, sep = "", collapse = ", "), ", ", sep = ""),
         ""
       )
       

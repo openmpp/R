@@ -12,8 +12,8 @@
 # paramName - parameter name, i.e.: "sexAge"
 #
 # return data frame of parameter table rows:
-#   $dim0,... - dimension item enum ids (not returned if rank is zero)
-#   $value    - parameter value
+#   $dimName,... - dimension item enum ids (not returned if rank is zero)
+#   $value       - parameter value
 #
 selectRunParameter <- function(dbCon, defRs, runId, paramName)
 {
@@ -62,16 +62,16 @@ selectRunParameter <- function(dbCon, defRs, runId, paramName)
   # FROM ageSex_p2012_817
   # WHERE run_id = (SELECT base_run_id FROM run_parameter WHERE run_id = 1234 AND parameter_hid = 1)
   # ORDER BY 1, 2, 3
+  d <- defRs$paramDims[which(defRs$paramDims$parameter_hid == paramRow$parameter_hid), c("col_name", "dim_name")]
+
   sqlSel <-
     paste(
       "SELECT sub_id, ", 
       ifelse(nRank > 0L,
         paste(
-          paste(
-            defRs$paramDims[which(defRs$paramDims$parameter_hid == paramRow$parameter_hid), "dim_name"],
-            sep = "", collapse = ", "
-          ), 
-          ", ", sep = ""
+          paste(d[,1], " AS ", '"', d[,2], '"', sep = "", collapse = ", "),
+          ", ",
+          sep = ""
         ),
         ""
       ),

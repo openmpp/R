@@ -14,10 +14,6 @@ library(DBI)
 library("openMpp")
 library("RSQLite")
 ```
-Above `~/openMpp_N.N.N.tar.gz` means the lastest release of openMpp R package, it can be for example:
-```
-install.packages("C:/openmpp_win_20210209/ompp-r/openMpp_0.8.6.tar.gz", repos = NULL, type = "source")
-```
 
 Download [latest openM++ release](https://github.com/openmpp/main/releases/latest), unpack it and `setwd()` to models directory:
 ```

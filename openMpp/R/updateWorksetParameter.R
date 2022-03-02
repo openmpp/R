@@ -92,10 +92,12 @@ updateWorksetParameter <- function(dbCon, defRs, worksetId, ...)
       
       # get name and size for each dimension if any dimensions exists for that parameter
       dimNames <- c("")
+      colNames <- c("")
       dimLen <- c(0L)
       if (paramRow$parameter_rank > 0) {
      
         dimNames <- defRs$paramDims[which(defRs$paramDims$parameter_hid == paramRow$parameter_hid), "dim_name"]
+        colNames <- defRs$paramDims[which(defRs$paramDims$parameter_hid == paramRow$parameter_hid), "col_name"]
         
         if (length(dimNames) != paramRow$parameter_rank) {
           stop("invalid length of dimension names vector for parameter: ", paramRow$parameter_name)
@@ -118,7 +120,7 @@ updateWorksetParameter <- function(dbCon, defRs, worksetId, ...)
         subId = nSubId,
         paramHid = paramRow$parameter_hid, 
         dbTableName = paramRow$db_set_table,
-        dims = data.frame(name = dimNames, size = dimLen, stringsAsFactors = FALSE)
+        dims = data.frame(name = dimNames, dbName = colNames, size = dimLen, stringsAsFactors = FALSE)
       )
       
       # update parameter value

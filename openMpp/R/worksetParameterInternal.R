@@ -61,8 +61,9 @@ updateWorksetParameterTxt <- function(dbCon, i_paramDef, i_wsParamTxt = NULL)
 #   $subId       - sub-value id
 #   $dbTableName - workset parameter table name
 #   $dims        - data frame for each dimension
-#     $name - dimension name
-#     $size - dimension size
+#     $name   - dimension name
+#     $dbName - db column name
+#     $size   - dimension size
 # i_value         - workset parameter values
 #   it can be scalar value, vector or data frame
 #   if scalar then $dims$size must be c(NA) or c(0) or c(1)
@@ -118,7 +119,7 @@ updateWorksetParameterValue <- function(dbCon, i_paramDef, i_value = NULL)
     
     # make items for all dimensions
     for (k in 1L:dimCount) {
-      dbDf[i_paramDef$dims$name[k]] <- 
+      dbDf[i_paramDef$dims$dbName[k]] <- 
         rep(
           seq.int(from = 0L, length.out = i_paramDef$dims$size[k]), 
           times = prod(head(i_paramDef$dims$size, k - 1L)), 
@@ -156,12 +157,12 @@ updateWorksetParameterValue <- function(dbCon, i_paramDef, i_value = NULL)
       paste(
         "INSERT INTO ", i_paramDef$dbTableName, 
         " (set_id, sub_id, ",
-        paste(i_paramDef$dims$name, sep = "", collapse=", "), ", ",
+        paste(i_paramDef$dims$dbName, sep = "", collapse=", "), ", ",
         " param_value)",
         " VALUES (",
         i_paramDef$setId, ", ",
         i_paramDef$subId, ", ",
-        paste(paste(":", i_paramDef$dims$name, sep = ""), sep = "", collapse = ", "), ", ",
+        paste(paste(":", i_paramDef$dims$dbName, sep = ""), sep = "", collapse = ", "), ", ",
         " :value)",
         sep = ""
       )

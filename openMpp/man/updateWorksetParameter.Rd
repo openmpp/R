@@ -31,7 +31,7 @@ updateWorksetParameter(dbCon, defRs, worksetId, ...)
         it can be scalar value. vector or data frame
         size of $value must be equal to production of dimension sizes
         if data frame then 
-          it must have $dim0, $dim1,..., $value columns
+          it must have $dimName0, $dimName1,..., $value columns
           and each column length is equal to production of dimension sizes
       \item \code{$txt} (optional) workset parameter text:
         data frame with $lang = language code and $note = value notes

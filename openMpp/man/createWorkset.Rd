@@ -38,7 +38,7 @@ createWorkset(dbCon, defRs, setDef, ...)
         it can be scalar value, vector or data frame
         size of $value must be equal to production of dimension sizes
         if data frame then 
-          it must have $dim0, $dim1,..., $value columns
+          it must have $dimName0, $dimName1,..., $value columns
           and each column length is equal to production of dimension sizes
       \item \code{$txt} (optional) workset parameter text:
         data frame with $lang = language code and $note = value notes
@@ -173,6 +173,14 @@ To run examples you must have modelOne database modelOne.sqlite in current direc
       lang = c("EN"), note = c("random generator starting seed"), stringsAsFactors = FALSE
     )
   )
+
+  # is old age parameter value and notes
+  isOldAge <- list(
+    name = "isOldAge", value = c(TRUE, FALSE, TRUE, FALSE),
+    txt = data.frame(
+      lang = c("EN"), note = c("Is Old Age notes"), stringsAsFactors = FALSE
+    )
+  )
   
   # file path parameter value and notes, "filePath" is string parameter
   filePath <- list(
@@ -201,7 +209,7 @@ To run examples you must have modelOne database modelOne.sqlite in current direc
   defRs <- getModel(theDb, "modelOne")
   
   # create new workset with ALL model parameters
-  setId <- createWorkset(theDb, defRs, inputSet, ageSex, salaryAge, salaryFull, baseSalary, startingSeed, filePath)
+  setId <- createWorkset(theDb, defRs, inputSet, ageSex, salaryAge, salaryFull, baseSalary, startingSeed, isOldAge, filePath)
   if (setId <= 0L) stop("workset creation failed: ", defRs$modelDic$model_name, " ", defRs$modelDic$model_digest)
   
   # make workset read-only in order to run the model

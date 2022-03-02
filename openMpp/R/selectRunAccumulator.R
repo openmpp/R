@@ -87,16 +87,16 @@ selectRunAccumulator <- function(dbCon, defRs, runId, tableName, accName = NA)
   # AND acc_id = 4
   # ORDER BY 1, 2, 3, 4
   #
+  d <- defRs$tableDims[which(defRs$tableDims$table_hid == tableRow$table_hid), c("col_name", "dim_name")]
+
   sqlSel <-
     paste(
       "SELECT acc_id, sub_id, ", 
       ifelse(nRank > 0L,
         paste(
-          paste(
-            defRs$tableDims[which(defRs$tableDims$table_hid == tableRow$table_hid), "dim_name"],
-            sep = "", collapse = ", "
-          ),
-          ", ", sep = ""
+          paste(d[,1], " AS ", '"', d[,2], '"', sep = "", collapse = ", "),
+          ", ",
+          sep = ""
         ),
         ""
       ),

@@ -83,16 +83,16 @@ selectRunOutputValue <- function(dbCon, defRs, runId, tableName, exprName = NA)
   # AND expr_id = 3
   # ORDER BY 1, 2, 3
   #
+  d <- defRs$tableDims[which(defRs$tableDims$table_hid == tableRow$table_hid), c("col_name", "dim_name")]
+
   sqlSel <-
     paste(
       "SELECT expr_id, ", 
       ifelse(nRank > 0L,
         paste(
-          paste(
-            defRs$tableDims[which(defRs$tableDims$table_hid == tableRow$table_hid), "dim_name"],
-            sep = "", collapse = ", "
-          ),
-          ", ", sep = ""
+          paste(d[,1], " AS ", '"', d[,2], '"', sep = "", collapse = ", "),
+          ", ",
+          sep = ""
         ),
         ""
       ),

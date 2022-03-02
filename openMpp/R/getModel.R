@@ -108,7 +108,7 @@ getModel <- function(dbCon, modelName, modelDigest = NA)
   defRs[["paramDims"]] <- dbGetQuery(
     dbCon, 
     paste(
-      "SELECT MP.model_id, MP.model_parameter_id, D.parameter_hid, D.dim_name, D.type_hid, MT.model_type_id",
+      "SELECT MP.model_id, MP.model_parameter_id, D.parameter_hid, D.dim_id, D.dim_name, D.type_hid, MT.model_type_id, D.dim_name AS col_name",
       " FROM parameter_dims D",
       " INNER JOIN model_parameter_dic MP ON (MP.parameter_hid = D.parameter_hid AND MP.model_id = ", defRs$modelDic$model_id, ")",
       " INNER JOIN model_type_dic MT ON (MT.type_hid = D.type_hid AND MT.model_id = ", defRs$modelDic$model_id, ")",
@@ -129,6 +129,11 @@ getModel <- function(dbCon, modelName, modelDigest = NA)
   if (!all(defRs$paramDims$type_hid %in% defRs$typeEnum$type_hid)) {
     stop("parameter dimension type(s) not found")
   }
+
+  # set dimension db colunm name as "dim" + id
+  if (nrow(defRs$paramDims) > 0) {
+    defRs$paramDims$col_name <- paste("dim", defRs$paramDims$dim_id, sep = "")
+  }
   
   # model output tables rows: table_dic
   defRs[["tableDic"]] <- dbGetQuery(
@@ -147,7 +152,7 @@ getModel <- function(dbCon, modelName, modelDigest = NA)
   defRs[["tableDims"]] <- dbGetQuery(
     dbCon, 
     paste(
-      "SELECT M.model_id, M.model_table_id, D.table_hid, D.dim_name, D.type_hid, MT.model_type_id, D.is_total, D.dim_size",
+      "SELECT M.model_id, M.model_table_id, D.table_hid, D.dim_id, D.dim_name, D.type_hid, MT.model_type_id, D.is_total, D.dim_size, D.dim_name AS col_name",
       " FROM table_dims D",
       " INNER JOIN model_table_dic M ON (M.table_hid = D.table_hid AND M.model_id = ", defRs$modelDic$model_id, ")",
       " INNER JOIN model_type_dic MT ON (MT.type_hid = D.type_hid AND MT.model_id = ", defRs$modelDic$model_id, ")",
@@ -169,11 +174,16 @@ getModel <- function(dbCon, modelName, modelDigest = NA)
     stop("output table dimension(s) not found")
   }
 
+  # set dimension db colunm name as "dim" + id
+  if (nrow(defRs$tableDims) > 0) {
+    defRs$tableDims$col_name <- paste("dim", defRs$tableDims$dim_id, sep = "")
+  }
+
   # output table accumulators rows: table_acc
   defRs[["tableAcc"]] <- dbGetQuery(
     dbCon, 
     paste(
-      "SELECT M.model_id, M.model_table_id, A.table_hid, A.acc_id, A.acc_name",
+      "SELECT M.model_id, M.model_table_id, A.table_hid, A.acc_id, A.acc_name, A.is_derived, A.acc_name AS col_name",
       " FROM table_acc A",
       " INNER JOIN model_table_dic M ON (M.table_hid = A.table_hid AND M.model_id = ", defRs$modelDic$model_id, ")",
       " ORDER BY 1, 2, 4",
@@ -182,11 +192,18 @@ getModel <- function(dbCon, modelName, modelDigest = NA)
   )
   if (nrow(defRs$tableAcc) <= 0) stop("definition for output table(s) accumulators not found")
 
+  # set accumulator db colunm name: (is derived accumulator) ? "acc" + id : "expr" + id
+  defRs$tableAcc$col_name <- paste(
+    ifelse(defRs$tableAcc$is_derived == 0, "acc", "expr"),
+    defRs$tableAcc$acc_id,
+    sep = ""
+  )
+
   # output table expressions (analysis dimension items) rows: table_expr
   defRs[["tableExpr"]] <- dbGetQuery(
     dbCon, 
     paste(
-      "SELECT M.model_id, M.model_table_id, E.table_hid, E.expr_id, E.expr_name, E.expr_decimals",
+      "SELECT M.model_id, M.model_table_id, E.table_hid, E.expr_id, E.expr_name, E.expr_decimals, E.expr_name AS col_name",
       " FROM table_expr E",
       " INNER JOIN model_table_dic M ON (M.table_hid = E.table_hid AND M.model_id = ", defRs$modelDic$model_id, ")",
       " ORDER BY 1, 2, 4",
@@ -194,6 +211,9 @@ getModel <- function(dbCon, modelName, modelDigest = NA)
     )
   )
   if (nrow(defRs$tableExpr) <= 0) stop("definition for output table(s) expressions not found")
+
+  # set expression db colunm name as "expr" + id
+  defRs$tableExpr$col_name <- paste("expr", defRs$tableExpr$expr_id, sep = "")
 
   return(defRs)
 }

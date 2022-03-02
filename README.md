@@ -20,10 +20,13 @@ Download [latest openM++ release](https://github.com/openmpp/main/releases/lates
 setwd("~/openmpp_win_20210209/models/bin")
 ```
 
-Try our examples:
+Examples can be found at: [R / openMpp / inst/ ](https://github.com/openmpp/R/tree/master/openMpp/inst)
+
+Above examples are also documented at our wiki:
 
 - life_vs_mortality_test.R: [analyze DurationOfLife using MortalityHazard parameter](https://github.com/openmpp/openmpp.github.io/wiki/Run-Model-from-R)
 - riskpaths_childlessness.R: [analyze contribution of delayed union formations versus decreased fertility on childlessness](https://github.com/openmpp/openmpp.github.io/wiki/Run-RiskPaths-Model-from-R)
+
 
 ## Build from sources and install
 

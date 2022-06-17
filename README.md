@@ -33,7 +33,7 @@ Please consult our wiki for [oms API details.](https://github.com/openmpp/openmp
 
 ## Install and use openMpp R package
 
-OpenMpp package tested only with R up to version 3.6.3, please use above
+OpenMpp package tested only with R up to version 3.6.3, please use above `oms` web-service API if you need additiomal functionality.
 
 Download [latest openMpp R package release](https://github.com/openmpp/r/releases/latest) and install:
 ```
@@ -70,6 +70,16 @@ For other vendors (Microsoft SQL, MySQL, PostgreSQL, IBM DB2, Oracle) only selec
 
 Please check openMpp package `man` documentation and `inst` examples.
 Also visit our [wiki](https://github.com/openmpp/openmpp.github.io/wiki) for more information.
+
+## Screenshots
+
+**NewCaseBased** model:  loop over MortalityHazard parameter to analyze DurationOfLife output value.
+
+![Example of NewCaseBased model run.](/images/RStudio_NewCaseBased_oms_2022-06-16.png "Example of NewCaseBased model run.")
+
+**RiskPaths** model: analyze contribution of delayed union formations versus decreased fertility on childlessness.
+
+![Example of RiskPaths model run.](/images/RStudio_RiskPaths_oms_2022-06-16.png "Example of RiskPaths model run.")
 
 License: MIT.
 

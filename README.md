@@ -28,8 +28,7 @@ In order to use it on your local desktop please do:
   ```
 
 There are few examples and small set of helper functions in `oms-R` part of that repository.
-
-Please consult our wiki for [Oms API details.](https://github.com/openmpp/openmpp.github.io/wiki/Oms-web-service)
+Please consult our wiki for [oms API details.](https://github.com/openmpp/openmpp.github.io/wiki/Oms-web-service)
 
 
 ## Install and use openMpp R package

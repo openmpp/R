@@ -20,7 +20,7 @@ library("httr")
 source("~/omsCommon.R")
 
 #
-# Model digest of OncoSimX-lung version 3.5.0.90: "ec388f9e6221e63ac248818b04633515"
+# Model digest of OncoSimX-lung version 3.5.0.90: "b4aac07eb78f31f3fcb7bbb3057c27b8"
 #
 md <- "b4aac07eb78f31f3fcb7bbb3057c27b8"
 

@@ -1,11 +1,40 @@
-# openMpp R package
+# Using openM++ from R
 
 This repository is a part of [OpenM++](http://www.openmpp.org/) open source microsimulation platform.
-It contains openMpp R package which allow read and update openM++ model database.
+It contains two independent implementations of R tools for openM++ models:
+* how-to use examples and small set of helper functions for integration between R and `oms` web-service
+* openMpp R package which allow read and update openM++ model database on your local computer.
 
-As it is today openMpp package tested only with R up to version 3.6.3 and R version 4 has not been tested yet.
 
-## Install and use latest release
+# How to use `oms` web-service from R to run models
+
+OpenM++ web-service (oms) is a JSON web-service written in Go and used from openM++ UI JavaScript.
+It is also possible to use it from any modern software (.NET, Python, Java, Perl, R, etc.) to run openM++ models,
+prepare input data and retrive output results. 
+
+In order to use it on your local desktop please do:
+* download openM++ release from https://github.com/openmpp/main/releases/latest
+* unpack it into any directory
+* start `oms` web-service:
+  * on Windows:
+  ```
+  cd C:\my-openmpp-release
+  bin\ompp_ui.bat
+  ```
+  * on Linux or MacOS:
+  ```
+  cd ~/my-openmpp-release
+  bin/oms
+  ```
+
+There are few examples and small set of helper functions in `oms-R` part of that repository.
+
+Please consult our wiki for [Oms API details.](https://github.com/openmpp/openmpp.github.io/wiki/Oms-web-service)
+
+
+## Install and use openMpp R package
+
+OpenMpp package tested only with R up to version 3.6.3, please use above
 
 Download [latest openMpp R package release](https://github.com/openmpp/r/releases/latest) and install:
 ```
@@ -28,7 +57,7 @@ Above examples are also documented at our wiki:
 - riskpaths_childlessness.R: [analyze contribution of delayed union formations versus decreased fertility on childlessness](https://github.com/openmpp/openmpp.github.io/wiki/Run-RiskPaths-Model-from-R)
 
 
-## Build from sources and install
+## Build openMpp R package from sources
 
 ```
 R CMD build openMpp

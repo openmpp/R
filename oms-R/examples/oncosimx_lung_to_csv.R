@@ -48,6 +48,11 @@ firstRunDigest <- jr$RunDigest
 #
 # Use back-end cluster to run the model with 12 sub-values on 4 servers and 3 theards
 #
+# It is MPI model on small computational cluster of 4 servers
+# running 5 OncoSimX-lung_mpi instancces: "root" leader process and 4 computational processes
+# each computational process using modelling 3 threads
+# root process does only database operations and coordinate child workoload.
+#
 nRuns <- 4
 smokingDuration <- seq(from = 1, by = 2, length.out = nRuns)
 

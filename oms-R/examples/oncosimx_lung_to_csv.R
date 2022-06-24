@@ -70,10 +70,10 @@ for (k in 1:nRuns)
   pd <- list(
       ModelDigest = md,
       Mpi = list(Np = 5),                      # MPI cluster: run 5 processes
-      Template = "mpi.OncoSimX.template.txt",  # MPI cluster: model run tempate
+      Template = "mpi.OncoSimX.template.txt",  # MPI cluster: model run template
       Opts = list(
         Parameter.LcScreenSmokingDurationCriteria = toString(smokingDuration[k]),
-        Parameter.SimulationCases = "6000",
+        Parameter.SimulationCases = "6000",    # use only 6000 simulation cases for quick test
         OpenM.BaseRunDigest = firstRunDigest,  # base run to get the rest of input parameters
         OpenM.SubValues = "12",                # use 12 sub-values (sub-samples)
         OpenM.Threads = "3",                   # use 3 modeling threads

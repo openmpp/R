@@ -78,7 +78,7 @@ firstRunDigest <- jr$RunDigest
 # by reading it from first model run results
 #
 rsp <- GET(paste0(
-    apiUrl, "model/", md, "/run/", firstRunDigest, "/parameter/AgeBaselineForm1/value"
+    apiUrl, "model/", md, "/run/", firstRunDigest, "/parameter/AgeBaselineForm1/value/start/0/count/0"
   ))
 if (http_type(rsp) != 'application/json') {
   stop("Failed to get parameter AgeBaselineForm1")
@@ -86,7 +86,7 @@ if (http_type(rsp) != 'application/json') {
 ageFirstUnion <- content(rsp)
 
 rsp <- GET(paste0(
-    apiUrl, "model/", md, "/run/", firstRunDigest, "/parameter/UnionStatusPreg1/value"
+    apiUrl, "model/", md, "/run/", firstRunDigest, "/parameter/UnionStatusPreg1/value/start/0/count/0"
   ))
 if (http_type(rsp) != 'application/json') {
   stop("Failed to get parameter UnionStatusPreg1")

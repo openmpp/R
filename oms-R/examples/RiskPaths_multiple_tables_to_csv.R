@@ -1,5 +1,5 @@
 #
-# Read multiple tables from multiple model runs and save each table valaues as TableName.csv
+# Read multiple tables from multiple model runs and save each table values as TableName.csv
 #
 library("jsonlite")
 library("httr")

@@ -1,12 +1,9 @@
 #
-# Read multiple tables from multiple model runs and save it as XLSX file
+# Read multiple tables from multiple model runs and save each table values as TableName.csv
 # Also save model runs meatadata and tables metadata (name, description, notes) into .csv files
-# Model run names and table names are coming from another input XLSX file
 #
 library("jsonlite")
 library("httr")
-library("readxl")
-library("writexl")
 
 # Include openM++ helper functions from your $HOME directory
 #
@@ -27,22 +24,17 @@ apiUrl <- getOmsApiUrl()
 # run digest is unique and it preferable way to identify model run
 # run names are user friendly may not be unique
 #
-# read model run names from some XLSX file, 
-#   it must have sheet name = "RunNames" with A column "RunNames"
-#
-rn <- read_xlsx(
-  "model-runs-to-read-and-tables-to-read.xlsx", 
-  sheet = "RunNames", 
-  col_types = "text"
+runNames <- c(
+  "New 123,000 cases",
+  "New 456,000 cases",
+  "New 789,000 cases"
   )
 
-# read table names from some XLSX file, 
-#   it must have sheet name = "TableNames" with A column "TableNames"
+# output tables to retrieve data from
 #
-tn <- read_xlsx(
-  "model-runs-to-read-and-tables-to-read.xlsx",
-  sheet = "TableNames",
-  col_types = "text"
+tblNames <- c(
+  "T04_FertilityRatesByAgeGroup",
+  "T03_FertilityByAge"
   )
 
 # get table information
@@ -59,7 +51,7 @@ tTxt <- jr$TableTxt
 tableInfo <- data.frame()
 
 for (t in tTxt) {
-  for (tbl in tn$TableNames)
+  for (tbl in tblNames)
   {
     if (t$Table$Name == tbl) {
       ti <- data.frame(
@@ -73,11 +65,15 @@ for (t in tTxt) {
   }
 }
 
+# save table information into some .csv file
+#
+write.csv(tableInfo, "tableInfo.csv", row.names = FALSE)
+
 # get run information
 #
 runInfo <- data.frame()
 
-for (run in rn$RunNames)
+for (run in runNames)
 {
   rsp <- GET(paste0(
       apiUrl, "model/", md, "/run/", URLencode(run, reserved = TRUE), "/text"
@@ -104,30 +100,23 @@ for (run in rn$RunNames)
   runInfo <- rbind(runInfo, ri)
 }
 
-# for each table do:
-#   combine all run results and write it into some .xlsx file
+# save run information into some .csv file
+#
+write.csv(runInfo, "runInfo.csv", row.names = FALSE)
+
+# combine all run results and write it into T04_FertilityRatesByAgeGroup.csv
 #
 
-shts <- list(
-    RunInfo = runInfo,
-    TableInfo = tableInfo
-  )
+allCct <- NULL
 
-for (tbl in tn$TableNames)
+for (run in runNames)
 {
-
-  allCct <- NULL
-
-  for (run in rn$RunNames)
-  {
-    cct <- read.csv(paste0(
-      apiUrl, "model/", md, "/run/", URLencode(run, reserved = TRUE), "/table/", tbl, "/expr/csv"
-      ))
-    cct$RunName <- run
+  cct <- read.csv(paste0(
+    apiUrl, "model/", md, "/run/", URLencode(run, reserved = TRUE), "/table/T04_FertilityRatesByAgeGroup/expr/csv"
+    ))
+  cct$RunName <- run
  
-    allCct <- rbind(allCct, cct)
-  }
-  shts[[ tbl ]] <- allCct
+  allCct <- rbind(allCct, cct)
 }
 
-write_xlsx(shts, paste0("some-name-here.xlsx"))
+write.csv(allCct, "T04_FertilityRatesByAgeGroup.csv", row.names = FALSE)

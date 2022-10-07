@@ -1,13 +1,6 @@
 #
 # Read tables from multiple model runs and save it as XLSX file
 #
-
-# If jsonlite, httr, readxl or writexl is not installed then do:
-#   install.packages("jsonlite")
-#   install.packages("httr")
-#   install.packages("readxl")
-#   install.packages("writexl")
-#
 library("jsonlite")
 library("httr")
 library("writexl")
@@ -38,7 +31,7 @@ runNames <- c(
   )
 
 # for each table do:
-#   combine all run results and write it into TableName.csv
+#   combine all run results and write it into some .xlsx file
 #
 tblNames <- c(
   "T04_FertilityRatesByAgeGroup",

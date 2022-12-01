@@ -27,8 +27,27 @@ In order to use it on your local desktop please do:
   bin/oms
   ```
 
-There are few examples and small set of helper functions in `oms-R` part of that repository.
-Please consult our wiki for [oms API details.](https://github.com/openmpp/openmpp.github.io/wiki/Oms-web-service)
+There are few examples in `oms-R` part of that repository.
+Those examples are using small set of helper functions by including it as:
+```
+source("~/omsCommon.R")
+```
+Above is assuming you have `omsCommon.R` file in your `$HOME` directory, on Windows `HOME` directory is: `C:\Users\Your-Name-Here\Documents`.
+This file is included in every openM++ release as `ompp-r/oms-R/omsCommon.R`, please copy it into your `$HOME` directory.
+If you don't have `omsCommon.R` then download it from https://github.com/openmpp/R , go to `oms-R` folder and click on `omsCommon.R`.
+If want to put `omsCommon.R` in any other location then update path `~/omsCommon.R` with your actual directory, e.g.: `my-R-is-here/omsCommon.R`.
+
+You don't have to use anything from `omsCommon.R` file, for example you can replace function call of:
+```
+apiUrl <- getOmsApiUrl()
+```
+with hard coded value:
+```
+apiUrl <- "http://localhost:4040/api/"
+```
+and that would work on your local computer.
+
+Also please consult our wiki for [oms API details.](https://github.com/openmpp/openmpp.github.io/wiki/Oms-web-service) .
 
 
 ## Install and use openMpp R package

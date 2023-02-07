@@ -1,6 +1,6 @@
 #
 # Read multiple tables from multiple model runs and save it as XLSX file
-# Also save model runs meatadata and tables metadata (name, description, notes) into .csv files
+# Also save model runs metadata and tables metadata (name, description, notes) into .csv files
 # Model run names and table names are coming from another input XLSX file
 #
 library("jsonlite")
@@ -117,17 +117,29 @@ for (tbl in tn$TableNames)
 {
 
   allCct <- NULL
+  isFirst <- TRUE
 
   for (run in rn$RunNames)
   {
     cct <- read.csv(paste0(
       apiUrl, "model/", md, "/run/", URLencode(run, reserved = TRUE), "/table/", tbl, "/expr/csv"
       ))
-    cct$RunName <- run
- 
-    allCct <- rbind(allCct, cct)
+
+    # build a pivot table data frame:
+    # use first run results to assign all dimensions and measure(s)
+    # from all subsequent model run bind only expr_value column
+    if (isFirst) {
+      allCct <- rbind(allCct, cct)
+      isFirst <- FALSE
+    } else {
+      cval <- data.frame(expr_value = cct$expr_value)
+      allCct <- cbind(allCct, cval)
+    }
+
+    # use run name for expression values column name
+    names(allCct)[names(allCct) == 'expr_value'] <- run
   }
   shts[[ tbl ]] <- allCct
 }
 
-write_xlsx(shts, paste0("some-name-here.xlsx"))
+write_xlsx(shts, paste0("output-tables-data.xlsx"))

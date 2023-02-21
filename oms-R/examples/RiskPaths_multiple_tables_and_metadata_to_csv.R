@@ -2,6 +2,10 @@
 # Read multiple tables from multiple model runs and save each table values as TableName.csv
 # Also save model runs metadata and tables metadata (name, description, notes) into .csv files
 #
+# If any of library below is not installed then do:
+#   install.packages("jsonlite")
+#   install.packages("httr")
+#
 library("jsonlite")
 library("httr")
 

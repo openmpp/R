@@ -1,6 +1,10 @@
 #
 # Read table values from multiple model runs and save it as TableName.csv
 #
+# If any of library below is not installed then do:
+#   install.packages("jsonlite")
+#   install.packages("httr")
+#
 library("jsonlite")
 library("httr")
 

@@ -1,6 +1,11 @@
 #
 # Read tables from multiple model runs and save it as XLSX file
 #
+# If any of library below is not installed then do:
+#   install.packages("jsonlite")
+#   install.packages("httr")
+#   install.packages("writexl")
+#
 library("jsonlite")
 library("httr")
 library("writexl")

@@ -3,6 +3,12 @@
 # Also save model runs metadata and tables metadata (name, description, notes) into .csv files
 # Model run names and table names are coming from another input XLSX file
 #
+# If any of library below is not installed then do:
+#   install.packages("jsonlite")
+#   install.packages("httr")
+#   install.packages("readxl")
+#   install.packages("writexl")
+#
 library("jsonlite")
 library("httr")
 library("readxl")

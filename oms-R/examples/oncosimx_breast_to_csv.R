@@ -206,10 +206,10 @@ if (is.na(taskName) || taskName == "") stop("Fail to create modeling task")
 
 #
 # Run OncoSimX-breast with modeling task and wait until task is completed
+# It is a sequential run, not parallel.
 #
-# It is MPI model on small computational cluster of 4 servers,
-# running 5 OncoSimX-breast_mpi instancces: "root" leader process and 4 computational processes
-# each computational process using modelling 3 threads
+# Running 4 OncoSimX-breast_mpi instances: "root" leader process and 3 computational processes
+# each computational process using modelling 4 threads
 # root process does only database operations and coordinate child workoload.
 #
 print(paste("Starting modeling task:", taskName))

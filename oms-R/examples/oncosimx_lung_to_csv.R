@@ -46,11 +46,10 @@ firstRunDigest <- jr$RunDigest
 # OncoSimX-lung_mpi -Parameter.SimulationCases 6000 -Parameter.LcScreenSmokingDurationCriteria 3
 #   .... and 2 more Smoking Duration values ....
 #
-# Use back-end cluster to run the model with 12 sub-values on 4 servers and 3 theards
+# It is a sequential run, not parallel.
 #
-# It is MPI model on small computational cluster of 4 servers
-# running 5 OncoSimX-lung_mpi instancces: "root" leader process and 4 computational processes
-# each computational process using modelling 3 threads
+# Running 4 OncoSimX-lung_mpi instances: "root" leader process and 3 computational processes
+# each computational process using modelling 4 threads
 # root process does only database operations and coordinate child workoload.
 #
 nRuns <- 4
@@ -72,7 +71,7 @@ for (k in 1:nRuns)
   pd <- list(
       ModelDigest = md,
       Mpi = list(
-        Np = 4,               # MPI cluster: run 4 processes: 3 for model and rott process
+        Np = 4,               # MPI cluster: run 4 processes: 3 for model and root process
         IsNotOnRoot = TRUE    # MPI cluster: do not use root process for modelling
       ),
       Template = "mpi.OncoSimX.template.txt",  # MPI cluster: model run template

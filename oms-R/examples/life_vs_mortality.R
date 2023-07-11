@@ -1,6 +1,6 @@
 #
 # R integration example using NewCaseBased model:
-#   loop over MortalityHazard parameter 
+#   loop over MortalityHazard parameter
 #   to analyze DurationOfLife
 #
 # Prerequisite:
@@ -23,12 +23,12 @@
 #   install.packages("jsonlite")
 #   install.packages("httr")
 #
-library("jsonlite")  
+library("jsonlite")
 library("httr")
 
 # Include openM++ helper functions from your $HOME directory
 # on Windows HOME directory is: "C:\Users\User Name Here\Documents"
-# 
+#
 # if you don't have omsCommon.R then download it from https://github.com/openmpp/R/oms-R
 # if you have omsCommon.R in some other location then update path below
 #
@@ -83,19 +83,20 @@ for (k in 1:nRuns)
 {
   print(c("Mortality Hazard:", mortality[k]))
 
+  # use explicit model run stamp to avoid compatibility issues between cloud model run queue and desktop MPI
+  stamp <- sub('.' , '_', fixed = TRUE, format(Sys.time(),"%Y_%m_%d_%H_%M_%OS3"))
+
   # prepare model run options
   pd <- list(
       ModelName = md,
-      # Mpi = list(Np = 5),                          # MPI cluster: run 5 processes
-      # Template = "mpi.NewCaseBased.template.txt",  # MPI cluster: model run tempate
       Opts = list(
         Parameter.MortalityHazard = toString(mortality[k]),
         Parameter.SimulationCases = "5000",
         OpenM.BaseRunDigest = firstRunDigest,  # base run to get the rest of input parameters
         OpenM.SubValues = "16",                # use 16 sub-values (sub-samples)
         OpenM.Threads = "4",                   # use 4 modeling threads
-        # OpenM.NotOnRoot = "true",              # MPI cluster: do not use root process for modelling
         OpenM.ProgressPercent = "100",         # reduce amount of progress messages in the log file
+        OpenM.RunStamp = stamp,                # use explicit run stamp
           # run name and description in English
         OpenM.RunName = paste("Mortality Hazard", toString(mortality[k])),
         EN.RunDescription = paste("model run with mortality hazard", toString(mortality[k]))
@@ -114,10 +115,11 @@ for (k in 1:nRuns)
     stop("Failed to run the model")
   }
   jr <- content(rsp)
-  rStamp <- jr$RunStamp  # model run stamp
+  submitStamp <- jr$SubmitStamp # model run submission stamp: not empty if model run submitted to run on cluster
+  runStamp <- jr$RunStamp       # model run stamp: not empty if model run started
 
   # wait until model run completed
-  runDigests[k] <- waitForRunCompleted(rStamp, apiUrl, md)
+  runDigests[k] <- waitForRunCompleted(stamp, apiUrl, md)
 }
 
 # for each run get output value
@@ -158,7 +160,7 @@ plot(
   mortality,
   lifeDuration,
   type = "o",
-  xlab = "Mortality Hazard", 
-  ylab = "Duration of Life", 
+  xlab = "Mortality Hazard",
+  ylab = "Duration of Life",
   col = "red"
 )

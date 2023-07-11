@@ -28,21 +28,21 @@ getOmsApiUrl <- function()
 #
 # Wait until model run completed
 #
-# runStamp          - model run stamp
+# stamp             - model run stamp
 # apiUrl            - backend web-service URL
 # modelNameOrDigest - model name or model digest
 #
 # return: model run digest
 #
-waitForRunCompleted <- function(runStamp, apiUrl, modelNameOrDigest)
+waitForRunCompleted <- function(stamp, apiUrl, modelNameOrDigest)
 {
   rDigest <- ""  # return run digest
 
-  nSleep <- 1  # seconds, time to sleep between checking model run status
-  nWait <- 20  # seconds, model run timeout: max time for model to start 
+  nSleep <- 1   # seconds, time to sleep between checking model run status
+  nWait <- 180  # seconds, model run timeout: max time for model to start
   n <- 0
   status <- ""
-  
+
   while (status == "" || status == "i" || status == 'p')
   {
     Sys.sleep(nSleep)
@@ -50,10 +50,10 @@ waitForRunCompleted <- function(runStamp, apiUrl, modelNameOrDigest)
 
     # get model run status
     rsp <- GET(paste0(
-      apiUrl, "model/", modelNameOrDigest, "/run/", runStamp, "/status"
+      apiUrl, "model/", modelNameOrDigest, "/run/", stamp, "/status"
     ))
     if (http_type(rsp) != 'application/json') {
-      stop("Failed to get run status ", runStamp)
+      stop("Failed to get run status ", stamp)
     }
     jr <- content(rsp)
     status <- jr$Status
@@ -69,11 +69,11 @@ waitForRunCompleted <- function(runStamp, apiUrl, modelNameOrDigest)
       if (n < nWait) {
         next  # wait more for model run to start
       }
-      stop("Model run failed to start: ", runStamp)  # model run start timeout, it takes too long
+      stop("Model run failed to start: ", stamp)  # model run start timeout, it takes too long
     }
     # else: model run failed
 
-    stop("Model run failed: ", runStamp, ", status: ", status)
+    stop("Model run failed: ", stamp, ", status: ", status)
   }
 
   return(rDigest)
@@ -83,21 +83,21 @@ waitForRunCompleted <- function(runStamp, apiUrl, modelNameOrDigest)
 # Wait until modeling task completed
 #
 # taskName          - modeling task name
-# taskRunStamp      - taskl run stamp
+# stamp             - model run stamp
 # apiUrl            - backend web-service URL
 # modelNameOrDigest - model name or model digest
 #
 # return: list of run digests
 #
-waitForTaskCompleted <- function(taskName, taskRunStamp, apiUrl, modelNameOrDigest)
+waitForTaskCompleted <- function(taskName, stamp, apiUrl, modelNameOrDigest)
 {
   runDigests <- c()
 
-  nSleep <- 1  # seconds, time to sleep between checking model run status
-  nWait <- 20  # seconds, model run timeout: max time for model to start 
+  nSleep <- 1   # seconds, time to sleep between checking model run status
+  nWait <- 180  # seconds, model run timeout: max time for model to start
   n <- 0
   status <- ""
-  
+
   while (status == "" || status == "i" || status == 'p' || status == 'w')
   {
     Sys.sleep(nSleep)
@@ -106,27 +106,26 @@ waitForTaskCompleted <- function(taskName, taskRunStamp, apiUrl, modelNameOrDige
 
     # get task run status
     rsp <- GET(paste0(
-      apiUrl, "model/", modelNameOrDigest, "/task/", taskName, "/run-status/run/", taskRunStamp
+      apiUrl, "model/", modelNameOrDigest, "/task/", taskName, "/run-status/run/", stamp
     ))
     if (http_type(rsp) != 'application/json') {
-      stop("Failed to get task run status ", taskRunStamp)
+      stop("Failed to get task run status ", stamp)
     }
     jr <- content(rsp)
     status <- jr$Status
-
 
     if (status == "s" || status == "p" || status == "w")  # run completed successfully or run in progress
     {
 
       # get status of each model run
       rsp <- GET(paste0(
-        apiUrl, "model/", modelNameOrDigest, "/run/", taskRunStamp, "/status/list"
+        apiUrl, "model/", modelNameOrDigest, "/run/", stamp, "/status/list"
       ))
       if (http_type(rsp) != 'application/json') {
-        stop("Failed to get run status ", taskRunStamp)
+        stop("Failed to get run status ", stamp)
       }
       jr <- content(rsp)
-      
+
       for (r in jr)
       {
         if (r$Status == "s") {
@@ -134,7 +133,7 @@ waitForTaskCompleted <- function(taskName, taskRunStamp, apiUrl, modelNameOrDige
         }
       }
       if (length(runDigests) != nCompleted) print(paste("Runs completed:", length(runDigests)))
-      
+
       if (status == "s") break  # task run completed
       next  # continue wait
     }
@@ -142,11 +141,11 @@ waitForTaskCompleted <- function(taskName, taskRunStamp, apiUrl, modelNameOrDige
       if (n < nWait) {
         next  # wait more for model run to start
       }
-      stop("Model run failed to start: ", taskRunStamp)  # model run start timeout, it takes too long
+      stop("Model run failed to start: ", stamp)  # model run start timeout, it takes too long
     }
     # else: task run failed
 
-    stop("Task run failed: ", taskRunStamp, ", status: ", status)
+    stop("Task run failed: ", stamp, ", status: ", status)
   }
 
   return(runDigests)

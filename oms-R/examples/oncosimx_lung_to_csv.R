@@ -1,5 +1,5 @@
 #
-# Use R to run OncoSimX-lung version 3.5.0.90
+# Use R to run OncoSimX-lung version 3.6.1.5
 #   loop over LcScreenSmokingDurationCriteria parameter
 #   to output tables: Lung_Cancer_Rates_AgeStandard_Table and Lung_Cancer_Cases_Table
 #
@@ -8,21 +8,21 @@
 #   install.packages("jsonlite")
 #   install.packages("httr")
 #
-library("jsonlite")  
+library("jsonlite")
 library("httr")
 
 # Include openM++ helper functions from your $HOME directory
 # on Windows HOME directory is: "C:\Users\User Name Here\Documents"
-# 
+#
 # if you don't have omsCommon.R then download it from https://github.com/openmpp/R/oms-R
 # if you have omsCommon.R in some other location then update path below
 #
 source("~/omsCommon.R")
 
 #
-# Model digest of OncoSimX-lung version 3.5.0.90: "b4aac07eb78f31f3fcb7bbb3057c27b8"
+# Model digest of OncoSimX-lung version 3.6.1.5: "eeb246bd7d3bdb64d3e7aaefeaa828ea"
 #
-md <- "b4aac07eb78f31f3fcb7bbb3057c27b8"
+md <- "eeb246bd7d3bdb64d3e7aaefeaa828ea"
 
 # oms web-service URL from file: ~/oms_url.txt
 #
@@ -62,23 +62,28 @@ runNames <- rep('', nRuns)    # model run names, may be not unique
 for (k in 1:nRuns)
 {
   print(c("Smoking Duration:", smokingDuration[k]))
-  
+
   rn <- paste0("Smoking_Duration_", toString(smokingDuration[k]))
   runNames[k] <- rn
-  
+  # use explicit model run stamp to avoid compatibility issues between cloud model run queue and desktop MPI
+  stamp <- sub('.' , '_', fixed = TRUE, format(Sys.time(),"%Y_%m_%d_%H_%M_%OS3"))
+
   # prepare model run options
   pd <- list(
       ModelDigest = md,
-      Mpi = list(Np = 5),                      # MPI cluster: run 5 processes
+      Mpi = list(
+        Np = 4,               # MPI cluster: run 4 processes: 3 for model and rott process
+        IsNotOnRoot = TRUE    # MPI cluster: do not use root process for modelling
+      ),
       Template = "mpi.OncoSimX.template.txt",  # MPI cluster: model run template
       Opts = list(
         Parameter.LcScreenSmokingDurationCriteria = toString(smokingDuration[k]),
         Parameter.SimulationCases = "6000",    # use only 6000 simulation cases for quick test
         OpenM.BaseRunDigest = firstRunDigest,  # base run to get the rest of input parameters
         OpenM.SubValues = "12",                # use 12 sub-values (sub-samples)
-        OpenM.Threads = "3",                   # use 3 modeling threads
-        OpenM.NotOnRoot = "true",              # MPI cluster: do not use root process for modelling
-          # run name and description in English
+        OpenM.Threads = "4",                   # use 4 modeling threads
+        OpenM.RunStamp = stamp,                # use explicit run stamp
+         # run name and description in English
         OpenM.RunName = rn,
         EN.RunDescription = paste("Smoking Duration", toString(smokingDuration[k]), "years")
       ),
@@ -97,13 +102,14 @@ for (k in 1:nRuns)
     stop("Failed to run the model")
   }
   jr <- content(rsp)
-  rStamp <- jr$RunStamp  # model run stamp
+  submitStamp <- jr$SubmitStamp # model run submission stamp: not empty if model run submitted to run on cluster
+  runStamp <- jr$RunStamp       # model run stamp: not empty if model run started
 
   # wait until model run completed
-  runDigests[k] <- waitForRunCompleted(rStamp, apiUrl, md)
+  runDigests[k] <- waitForRunCompleted(stamp, apiUrl, md)
 }
 
-# combine all run results into Lung_Cancer_Cases_Table.csv 
+# combine all run results into Lung_Cancer_Cases_Table.csv
 #
 print("All model runs completed, retrive output values...")
 
@@ -115,7 +121,7 @@ for (k in 1:nRuns)
     apiUrl, "model/", md, "/run/", runDigests[k], "/table/Lung_Cancer_Cases_Table/expr/csv"
     ))
   cct$RunName <- runNames[k]
-  
+
   allCct <- rbind(allCct, cct)
 }
 

@@ -2,15 +2,11 @@
 
 This repository is a part of [OpenM++](http://www.openmpp.org/) open source microsimulation platform.
 It contains two independent implementations of R tools for openM++ models:
-* how-to use examples and small set of helper functions for integration between R and `oms` web-service
-* openMpp R package which allow read and update openM++ model database on your local computer.
+* `oms-R`: how-to use examples and small set of helper functions to use R on local PC or in cloud.
+* `openMpp`: R package which allow read and update openM++ model database on your local computer.
 
 
-# How to use `oms` web-service from R to run models
-
-OpenM++ web-service (oms) is a JSON web-service written in Go and used from openM++ UI JavaScript.
-It is also possible to use it from any modern software (.NET, Python, Java, Perl, R, etc.) to run openM++ models,
-prepare input data and retrive output results. 
+# `oms-R`: How to use R and `oms` web-service to run the models on local computer
 
 In order to use it on your local desktop please do:
 * download openM++ release from https://github.com/openmpp/main/releases/latest
@@ -50,7 +46,57 @@ and that would work on your local computer.
 Also please consult our wiki for [oms API details.](https://github.com/openmpp/openmpp.github.io/wiki/Oms-web-service) .
 
 
-## Install and use openMpp R package
+# `oms-R`: How to use R to run the models on in cloud
+
+You can run openM++ models in cloud from your local computer RStudio.
+
+Please do following:
+* create `.Renviron` file in your `HOME` directory with your cloud credentials:
+```
+OM_CLOUD_URL=https://cloud-url.openmpp.org
+OM_CLOUD_USER=demo
+OM_CLOUD_PWD=secret-password
+```
+**Security warning:** `.Renviron` file is not the safe place to store passwords, use it only if your local PC hard drive protected by encryption.
+
+* copy `omsCommon.R` file in your `$HOME` directory
+
+On Windows `HOME` directory is: `C:\Users\Your-Name-Here\Documents`.
+`omsCommon.R` file included in every openM++ release as `ompp-r/oms-R/omsCommon.R`.
+If you don't have `omsCommon.R` then download it from https://github.com/openmpp/R , go to `oms-R` folder and click on `omsCommon.R`.
+
+Use `ompp-r/oms-R/riskpaths_childlessness-cloud.R` example to write your own R script and run it from your local computer RStudio.
+For example:
+```
+library("jsonlite")
+library("httr")
+
+source("~/omsCommon.R")
+
+# login to cloud workspace
+
+lg <- loginToOpenmCloud()
+apiUrl <- lg$apiUrl
+loginToken <- lg$loginToken
+
+# get list of the models
+
+rsp <- GET(
+    paste0(
+      apiUrl, "model-list"
+    ),
+    set_cookies(jwt_token = loginToken)
+  )
+if (http_type(rsp) != 'application/json') {
+  stop("Failed to get first run status")
+}
+allModels <- content(rsp)
+```
+
+Also please consult our wiki for [oms API details.](https://github.com/openmpp/openmpp.github.io/wiki/Oms-web-service) .
+
+
+## `openMpp`: Install and use openMpp R package
 
 OpenMpp package tested only with R up to version 3.6.3, please use above `oms` web-service API if you need additiomal functionality.
 
@@ -99,6 +145,14 @@ Also visit our [wiki](https://github.com/openmpp/openmpp.github.io/wiki) for mor
 **RiskPaths** model: analyze contribution of delayed union formations versus decreased fertility on childlessness.
 
 ![Example of RiskPaths model run.](/images/RStudio_RiskPaths_oms_2022-06-16.png "Example of RiskPaths model run.")
+
+**.Renviron** file: how to do it on Windows
+
+![Create .Renviron file.](/images/R_cloud_renviron_file_2023-11-03.png "Create .Renviron file.")
+
+![Verify cloud login settings.](/images/R_cloud_check_env_2023-11-03.png "Verify cloud login settings.")
+
+**Important**: Clear console and clear history after checking your login name and password.
 
 License: MIT.
 

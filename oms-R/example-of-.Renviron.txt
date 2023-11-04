@@ -1,0 +1,3 @@
+OM_CLOUD_URL=https://cloud-url.openmpp.org
+OM_CLOUD_USER=demo
+OM_CLOUD_PWD=secret-password

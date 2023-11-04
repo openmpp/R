@@ -6,7 +6,7 @@ It contains two independent implementations of R tools for openM++ models:
 * `openMpp`: R package which allow read and update openM++ model database on your local computer.
 
 
-# `oms-R`: How to use R and `oms` web-service to run the models on local computer
+## `oms-R`: How to use R and `oms` web-service to run the models on local computer
 
 In order to use it on your local desktop please do:
 * download openM++ release from https://github.com/openmpp/main/releases/latest
@@ -46,7 +46,7 @@ and that would work on your local computer.
 Also please consult our wiki for [oms API details.](https://github.com/openmpp/openmpp.github.io/wiki/Oms-web-service) .
 
 
-# `oms-R`: How to use R to run the models on in cloud
+## `oms-R`: How to use R to run the models on in cloud
 
 You can run openM++ models in cloud from your local computer RStudio.
 

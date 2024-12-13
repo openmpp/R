@@ -1,27 +1,97 @@
 library("jsonlite")
 library("httr")
+library("askpass")
 
 #
 # Login into openM++ cloud instance, return oms API and JWT login token.
 #
+# If OM_CLOUD_GATE2 environmemnt variable not defined
+#   then it is a first version of cloud login
+#   else it is a second version (2024-11)
+#
 # Following environmemnt variables are required:
-#   OM_CLOUD_URL  - cloud URL, e.g.:       https://model.openmpp.org
-#   OM_CLOUD_USER - user login name, e.g.: demo
-#   OM_CLOUD_PWD  - login password, e.g.:  my-secret-password
+#   OM_CLOUD_URL  - cloud URL, e.g.: https://model.openmpp.org
+#   OM_CLOUD_USER - user name, e.g.: demo
 #
 loginToOpenmCloud <- function()
 {
+  omGateUrl <- Sys.getenv("OM_CLOUD_GATE2")
+
+  if (omGateUrl == "" || is.null(omGateUrl)) return (login_v1_ToOpenmCloud())
+
+  return (login_2024_11_ToOpenmCloud())
+}
+
+#
+# Login into openM++ cloud instance, return oms API and JWT login token.
+# Use it to login into the second vesrion of cloud login gate (2024-11).
+#
+# Following environmemnt variables are required:
+#   OM_CLOUD_GATE2 - login URL, e.g.: https://gate.openmpp.org
+#   OM_CLOUD_URL   - cloud URL, e.g.: https://model.openmpp.org
+#   OM_CLOUD_USER  - user name, e.g.: demo
+#
+login_2024_11_ToOpenmCloud <- function()
+{
+  omGateUrl <- Sys.getenv("OM_CLOUD_GATE2")
   omUrl <- Sys.getenv("OM_CLOUD_URL")
   omUsr <- Sys.getenv("OM_CLOUD_USER")
-  omPwd <- Sys.getenv("OM_CLOUD_PWD")
+
+  if (omGateUrl == "" || is.null(omGateUrl) || omUsr == "" || is.null(omUsr)) {
+    stop("OM_CLOUD_GATE2 and OM_CLOUD_USER must be defined")
+  }
+
+  pd <- list(
+      username = omUsr,
+      password = askpass("Password"),
+      realm = "local"
+    )
+  jv <- toJSON(pd, pretty = TRUE, auto_unbox = TRUE)
+
+  rsp <- POST(
+      url = paste0(omGateUrl, "/login"),
+      body = jv,
+      content_type_json(),
+      accept_json()
+  )
+
+  if (status_code(rsp) != 200 || http_type(rsp) != 'application/json') {
+    stop("Login FAILED")
+  }
+  print("Login OK")
+
+  # get JWT token from response authorization header, expected: "Bearer abcd..."
+  rspBear <- rsp[["headers"]][["authorization"]]
+  if (is.null(rspBear) || substr(rspBear, 1, nchar("Bearer")) != "Bearer") stop("Authorization FAILED")
+
+  jwtToken <- substr(rspBear, nchar("Bearer") + 2, nchar(rspBear))
+
+  if (jwtToken == "" || is.null(jwtToken)) stop("Invalid login, JWT token empty")
+
+  apiUrl <- paste0(omUrl, '/api/')    # oms web-service API URL
+
+  return( list(apiUrl = apiUrl, loginToken = jwtToken) )
+}
+
+# Login into openM++ cloud instance, return oms API and JWT login token.
+# Use it to login into the first vesrion of cloud login gate.
+#
+# Following environmemnt variables are required:
+#   OM_CLOUD_URL  - cloud URL, e.g.:       https://model.openmpp.org
+#   OM_CLOUD_USER - user login name, e.g.: demo
+#
+login_v1_ToOpenmCloud <- function()
+{
+  omUrl <- Sys.getenv("OM_CLOUD_URL")
+  omUsr <- Sys.getenv("OM_CLOUD_USER")
   
-  if (omUrl == "" || is.null(omUrl) || omUsr == "" || is.null(omUsr) || omPwd == "" || is.null(omPwd)) stop("OM_CLOUD_URL, OM_CLOUD_USER and OM_CLOUD_PWD must be defined")
+  if (omUrl == "" || is.null(omUrl) || omUsr == "" || is.null(omUsr)) stop("OM_CLOUD_URL and OM_CLOUD_USER must be defined")
   
   rsp <- POST(
       url = paste0(omUrl, '/login'),
       body = list(
         username=omUsr,
-        password=omPwd
+        password = askpass("Password")
       ),
       encode = "form"
     )

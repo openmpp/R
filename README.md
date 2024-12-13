@@ -53,13 +53,13 @@ Also please consult our wiki for [oms API details.](https://github.com/openmpp/o
 You can run openM++ models in cloud from your local computer RStudio.
 
 Please do following:
-* create `.Renviron` file in your `HOME` directory with your cloud credentials:
+* create `.Renviron` file in your `HOME` directory with your cloud user name, models URL and, if required, login gateway URL:
 ```
-OM_CLOUD_URL=https://cloud-url.openmpp.org
-OM_CLOUD_USER=demo
-OM_CLOUD_PWD=secret-password
+OM_CLOUD_URL=https://models.openmpp.org
+OM_CLOUD_USER=name
+OM_CLOUD_GATE2=https://gate.openmpp.org
+
 ```
-**Security warning:** `.Renviron` file is not the safe place to store passwords, use it only if your local PC hard drive protected by encryption.
 
 * copy `omsCommon.R` file in your `$HOME` directory
 

@@ -54,20 +54,16 @@ login_2024_11_ToOpenmCloud <- function()
       content_type_json(),
       accept_json()
   )
-
   if (status_code(rsp) != 200 || http_type(rsp) != 'application/json') {
     stop("Login FAILED")
   }
   print("Login OK")
 
-  # get JWT token from response authorization header, expected: "Bearer abcd..."
-  rspBear <- rsp[["headers"]][["authorization"]]
-  if (is.null(rspBear) || substr(rspBear, 1, nchar("Bearer")) != "Bearer") stop("Authorization FAILED")
+  # get JWT token from response cookies
+  c <- cookies(rsp)
+  if (is.null(c$name) || c$name != "jwt_token" || is.null(c$value) || c$value == "") stop("Invalid login, JWT token empty")
 
-  jwtToken <- substr(rspBear, nchar("Bearer") + 2, nchar(rspBear))
-
-  if (jwtToken == "" || is.null(jwtToken)) stop("Invalid login, JWT token empty")
-
+  jwtToken <- c$value
   apiUrl <- paste0(omUrl, '/api/')    # oms web-service API URL
 
   return( list(apiUrl = apiUrl, loginToken = jwtToken) )

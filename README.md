@@ -5,7 +5,7 @@ It contains two independent implementations of R tools for openM++ models:
 * `oms-R`: how-to use examples and small set of helper functions to use R on local PC or in cloud.
 * `openMpp`: R package which allow read and update openM++ model database on your local computer.
 
-There is also an excelent R package created by Matthew T. Warkentin available at: [oncology-outcomes/openmpp](https://github.com/oncology-outcomes/openmpp).
+There is also an excelent R package created by Matthew T. Warkentin available at: [mattwarkentin/openmpp](https://github.com/mattwarkentin/openmpp).
 
 
 ## `oms-R`: How to use R and `oms` web-service to run the models on local computer
